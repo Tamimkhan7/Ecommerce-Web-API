@@ -85,6 +85,8 @@
 
 
 
+using Microsoft.AspNetCore.Mvc;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -110,25 +112,29 @@ app.MapGet("/api/categories", () => Results.Ok(categories));
 
 
 //  Create = Create a category => POST : /api/categories
-app.MapPost("/api/categories", () =>
+app.MapPost("/api/categories", ([FromBody] Category categoryData) =>
 {
+    // Console.WriteLine($"{categoryData}");
     var newcategory = new Category
     {
         // given random id 
-        CategoryId = Guid.Parse("6953d581-1c31-4896-9dc0-3f8bbbf20abb"),
-        Name = "Electronics",
-        Description = "Devices and gadgets including phones, laptops, and other electronic equipment",
+        CategoryId = Guid.NewGuid(),
+        Name = categoryData.Name,
+        Description = categoryData.Description,
         CreatedAt = DateTime.UtcNow,
 
     };
     categories.Add(newcategory);
     return Results.Created($"/api/categories/{newcategory.CategoryId}", newcategory);
+    // return Results.Ok();
 });
 
 //  Delete = Delete a category => DELETE : /api/categories
-app.MapDelete("/api/categories", () =>
+app.MapDelete("/api/categories/{categoriId}", (Guid categoriId) =>
 {
-    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == Guid.Parse("6953d581-1c31-4896-9dc0-3f8bbbf20abb"));
+    // var foundCategories = categories.FirstOrDefault(category => category.CategoryId == Guid.Parse("6953d581-1c31-4896-9dc0-3f8bbbf20abb"));
+    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == categoriId);
+
     if (foundCategories == null) { return Results.NotFound("Categories with this id does not exist"); }
     categories.Remove(foundCategories);
     return Results.NoContent();
@@ -136,12 +142,12 @@ app.MapDelete("/api/categories", () =>
 
 
 //  update = update a category => update : /api/categories
-app.MapPut("/api/categories", () =>
+app.MapPut("/api/categories/{categoryId}", (Guid categoryId, [FromBody] Category categorydata) =>
 {
-    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == Guid.Parse("6953d581-1c31-4896-9dc0-3f8bbbf20abb"));
+    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == categoryId);
     if (foundCategories == null) { return Results.NotFound("Categories with this id does not exist"); }
-    foundCategories.Name = "Smart Phone";
-    foundCategories.Description = "smart phone is a nice category";
+    foundCategories.Name = categorydata.Name;
+    foundCategories.Description = categorydata.Description;
     return Results.NoContent();
 });
 

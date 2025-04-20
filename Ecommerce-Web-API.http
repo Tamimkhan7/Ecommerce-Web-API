@@ -1,13 +1,34 @@
- 
-#   GET http://localhost:5161
+### 
+  GET http://localhost:5161
 
- ###
-
-
-#   GET http://localhost:5161/hello
-
-  
- ###
+###
 
 
-  POST http://localhost:5161/hello
+  GET http://localhost:5161/hello
+
+###
+
+
+  POST http://localhost:5161/api/categories
+  Content-Type: application/json
+
+  {
+    "name": "Electonics",
+    "description": "devices and gadgets including phones, laptops, and other electronic equipment"
+  }
+
+
+###
+
+  DELETE http://localhost:5161/api/categories/6953d581-1c31-4896-9dc0-3f8bbbf20abb
+
+
+###
+  PUT http://localhost:5161/api/categories/6953d581-1c31-4896-9dc0-3f8bbbf20abb
+  Content-Type: application/json
+
+  {
+    "name": "Electonics2",
+    "description": "devices and gadgets including phones, laptops, and other electronic equipment second part"
+  }
+
