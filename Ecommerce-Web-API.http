@@ -3,20 +3,19 @@
 
 ###
 
-
-  GET http://localhost:5161/hello
+# there are searching value is apple, if we find anything we will return it
+GET http://localhost:5161/api/categories?searchValue=phone
 
 ###
 
 
-  POST http://localhost:5161/api/categories
-  Content-Type: application/json
+POST http://localhost:5161/api/categories
+Content-Type: application/json
 
-  {
-    "name": "Electonics",
-    "description": "devices and gadgets including phones, laptops, and other electronic equipment"
-  }
-
+{
+  "name": "fresh",
+  "description": "Devices and gadgets like phones and laptops"
+}
 
 ###
 
@@ -28,7 +27,9 @@
   Content-Type: application/json
 
   {
-    "name": "Electonics2",
+    "name": "Clothing and sports abc",
     "description": "devices and gadgets including phones, laptops, and other electronic equipment second part"
   }
 
+ 
+ 

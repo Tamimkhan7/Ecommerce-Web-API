@@ -84,16 +84,17 @@
 
 
 
-
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Enable Swagger in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -102,64 +103,74 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-List<Category> categories = new List<Category>();
+// In-memory data storage
+List<Category> categories = new();
 
+// ✅ Root route
 app.MapGet("/", () => "API is working fine");
-//  Read = Read a category => GET : /api/categories
-app.MapGet("/api/categories", () => Results.Ok(categories));
 
+// ✅ GET all categories or search by name/description
+app.MapGet("/api/categories", (string? searchValue) =>
+{
+    if (!string.IsNullOrWhiteSpace(searchValue))
+    {
+        var filtered = categories
+            .Where(c => c.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+                     || c.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+        return Results.Ok(filtered);
+    }
 
+    return Results.Ok(categories);
+});
 
-
-//  Create = Create a category => POST : /api/categories
+// ✅ CREATE a new category
 app.MapPost("/api/categories", ([FromBody] Category categoryData) =>
 {
-    // Console.WriteLine($"{categoryData}");
-    var newcategory = new Category
+    var newCategory = new Category
     {
-        // given random id 
         CategoryId = Guid.NewGuid(),
         Name = categoryData.Name,
         Description = categoryData.Description,
-        CreatedAt = DateTime.UtcNow,
-
+        CreatedAt = DateTime.UtcNow
     };
-    categories.Add(newcategory);
-    return Results.Created($"/api/categories/{newcategory.CategoryId}", newcategory);
-    // return Results.Ok();
+    categories.Add(newCategory);
+    return Results.Created($"/api/categories/{newCategory.CategoryId}", newCategory);
 });
 
-//  Delete = Delete a category => DELETE : /api/categories
-app.MapDelete("/api/categories/{categoriId}", (Guid categoriId) =>
+// ✅ DELETE a category
+app.MapDelete("/api/categories/{categoryId}", (Guid categoryId) =>
 {
-    // var foundCategories = categories.FirstOrDefault(category => category.CategoryId == Guid.Parse("6953d581-1c31-4896-9dc0-3f8bbbf20abb"));
-    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == categoriId);
+    var found = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+    if (found == null)
+        return Results.NotFound("Category with this ID does not exist");
 
-    if (foundCategories == null) { return Results.NotFound("Categories with this id does not exist"); }
-    categories.Remove(foundCategories);
+    categories.Remove(found);
     return Results.NoContent();
 });
 
-
-//  update = update a category => update : /api/categories
-app.MapPut("/api/categories/{categoryId}", (Guid categoryId, [FromBody] Category categorydata) =>
+// ✅ UPDATE a category
+app.MapPut("/api/categories/{categoryId}", (Guid categoryId, [FromBody] Category updated) =>
 {
-    var foundCategories = categories.FirstOrDefault(category => category.CategoryId == categoryId);
-    if (foundCategories == null) { return Results.NotFound("Categories with this id does not exist"); }
-    foundCategories.Name = categorydata.Name;
-    foundCategories.Description = categorydata.Description;
+    var found = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+    if (found == null)
+        return Results.NotFound("Category with this ID does not exist");
+
+    found.Name = updated.Name;
+    found.Description = updated.Description;
     return Results.NoContent();
 });
 
+app.Run();
+
+// ✅ Model
 public record Category
 {
-    // create random id for category, guid provided random id
     public Guid CategoryId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; }
 }
-
 
 //CRUD
 //  Create = Create a category => POST : /api/categories
