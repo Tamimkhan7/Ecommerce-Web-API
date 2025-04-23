@@ -1,3 +1,4 @@
+using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -16,21 +17,31 @@ namespace Ecommerce_Web_API.Controllers
         [HttpGet]
         public IActionResult GetCategories(string? searchValue)
         {
-            if (!string.IsNullOrWhiteSpace(searchValue))
+            // if (!string.IsNullOrWhiteSpace(searchValue))
+            // {
+            //     var filtered = categories
+            //         .Where(c => c.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
+            //                  || c.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
+            //         .ToList();
+            //     return Ok(filtered);
+            // }
+            //categoryReadDto file theke value gula asbe and akta akta kore nibo, and store korabo categories stores a 
+            var categoryList = categories.Select(c => new CategoryReadDto
             {
-                var filtered = categories
-                    .Where(c => c.Name.Contains(searchValue, StringComparison.OrdinalIgnoreCase)
-                             || c.Description.Contains(searchValue, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-                return Ok(filtered);
-            }
+                CategoryId = c.CategoryId,
+                Name = c.Name,
+                Description = c.Description,
+                CreatedAt = c.CreatedAt
+            }).ToList();
+            // converted each value on the tolist value
 
-            return Ok(categories);
+            return Ok(categoryList);
         }
 
         // POST: /api/categories
         [HttpPost]
-        public IActionResult PostCategories([FromBody] Category categoryData)
+        // CategoryUpdateDto asce DTO  file theke, jeita user define
+        public IActionResult PostCategories([FromBody] CategoryUpdateDto categoryData)
         {
             if (string.IsNullOrEmpty(categoryData.Name))
                 return BadRequest("Category Name is required and cannot be empty");
@@ -43,7 +54,16 @@ namespace Ecommerce_Web_API.Controllers
                 CreatedAt = DateTime.UtcNow
             };
             categories.Add(newCategory);
-            return Created($"/api/categories/{newCategory.CategoryId}", newCategory);
+
+            // newcategory theke jei value gula pabo oi gula ami categoryreaddto te rekhe dilam
+            var categoryReadDto = new CategoryReadDto
+            {
+                CategoryId = newCategory.CategoryId,
+                Name = newCategory.Name,
+                Description = newCategory.Description,
+                CreatedAt = newCategory.CreatedAt,
+            };
+            return Created($"/api/categories/{newCategory.CategoryId}", categoryReadDto);
         }
 
         // DELETE: /api/categories/{categoryId}

@@ -13,7 +13,7 @@ POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-  "name": "smart phone",
+  "name": "baje phone",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }
@@ -24,11 +24,11 @@ Content-Type: application/json
 
 
 ###
-  PUT http://localhost:5161/api/categories/3e346dd5-7c31-4cfb-8754-e80eb62f434b
+  PUT http://localhost:5161/api/categories/a7a4c619-b21d-4838-91a8-bd73c7c5fcce
   Content-Type: application/json
 
   {
-    "name": "smart phone",
+    "name": "Alu phone",
     "description": "Electronices is most valueable parts for honda and cars"
   }
 

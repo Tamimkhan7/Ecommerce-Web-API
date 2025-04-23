@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Ecommerce_Web_API.Models
+namespace Ecommerce_Web_API.DTOs
 {
-    public class Category
+    public class CategoryCreateDto
     {
         // DTO file oi sob value niye kaj kore jei gula change hoy, jei gula input ba user theke ase na oi gula main file ar modde theke jay
-        // model basically kaj kore batabase ar sathe 
-        public Guid CategoryId { get; set; }
+        // DTO kaj kore data transfer ar sathe
         public string Name { get; set; }
         public string Description { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
+
     }
 }
