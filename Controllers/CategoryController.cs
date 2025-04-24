@@ -43,8 +43,17 @@ namespace Ecommerce_Web_API.Controllers
         // CategoryUpdateDto asce DTO  file theke, jeita user define
         public IActionResult PostCategories([FromBody] CategoryUpdateDto categoryData)
         {
-            if (string.IsNullOrEmpty(categoryData.Name))
-                return BadRequest("Category Name is required and cannot be empty");
+            // aita akhn ami data validation ar maddome amra korbo  
+            // if (string.IsNullOrEmpty(categoryData.Name))
+            //     return BadRequest("Category Name is required and cannot be empty");
+
+            // This checks whether the incoming model(data from client) satisfies all validation rules(like[Required], [StringLength], etc.) that you’ve defined on your model class.
+            if (!ModelState.IsValid)
+            {
+               
+            }
+
+
 
             var newCategory = new Category
             {

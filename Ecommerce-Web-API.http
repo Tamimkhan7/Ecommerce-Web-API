@@ -13,7 +13,7 @@ POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-  "name": "baje phone",
+    "name": "A",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }
