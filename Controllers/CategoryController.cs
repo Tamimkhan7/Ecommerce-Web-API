@@ -48,10 +48,10 @@ namespace Ecommerce_Web_API.Controllers
             //     return BadRequest("Category Name is required and cannot be empty");
 
             // This checks whether the incoming model(data from client) satisfies all validation rules(like[Required], [StringLength], etc.) that you’ve defined on your model class.
-            if (!ModelState.IsValid)
-            {
-               
-            }
+            // if (!ModelState.IsValid)
+            // {
+
+            // }
 
 
 

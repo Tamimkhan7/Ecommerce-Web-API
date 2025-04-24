@@ -13,14 +13,14 @@ POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-    "name": "A",
+    "name": "aaaxxxxxxaA",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }
 
 ###
 
-  DELETE http://localhost:5161/api/categories/14330a09-57e5-45fb-bb67-82d8666f216c
+  DELETE http://localhost:5161/api/categories/369e95f1-9e05-493a-8012-73fcb7caae41
 
 
 ###
