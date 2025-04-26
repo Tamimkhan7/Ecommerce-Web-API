@@ -1,5 +1,6 @@
 using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
+using Ecommerce_Web_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,17 @@ namespace Ecommerce_Web_API.Controllers
     [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
-        private static List<Category> categories = new();
 
+        //create constructor for eccess categoryServices file
+
+        private CategoryServices _categoryService;
+
+        public CategoryController(CategoryServices categoryServices)
+        {
+            // ai doroner dependency ke bola hoy direct dependency 
+            // use references for accessing
+            _categoryService = categoryServices;
+        }
 
         [HttpGet]
         public IActionResult GetCategories(string? searchValue)
@@ -26,13 +36,7 @@ namespace Ecommerce_Web_API.Controllers
             //     return Ok(filtered);
             // }
             //categoryReadDto file theke value gula asbe and akta akta kore nibo, and store korabo categories stores a 
-            var categoryList = categories.Select(c => new CategoryReadDto
-            {
-                CategoryId = c.CategoryId,
-                Name = c.Name,
-                Description = c.Description,
-                CreatedAt = c.CreatedAt
-            }).ToList();
+            var categoryList = _categoryService.GetAllCategories();
             // converted each value on the tolist value
 
             // return Ok(categoryList);
@@ -55,8 +59,8 @@ namespace Ecommerce_Web_API.Controllers
             //categoryReadDto file theke value gula asbe and akta akta kore nibo, and store korabo categories stores a 
 
             // check kori categoryid name kono kicu exist kore kina
-
-            var foundCategory = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            var categoryList = _categoryService.GetAllCategories();
+            var foundCategory = categoryList.FirstOrDefault(c => c.CategoryId == categoryId);
             if (foundCategory == null)
                 return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category with this ID does not exist" }, 400, "Validation Failed"));
 
@@ -67,14 +71,16 @@ namespace Ecommerce_Web_API.Controllers
                 Description = foundCategory.Description,
                 CreatedAt = foundCategory.CreatedAt
             };
-            // converted each value on the tolist value
 
-            // return Ok(categoryList);
-            //  value return from ApiResponse
-            // create objct for Apiresponse use new keyword
-            // ami just akta value return korci tai list return kora lagbe na, just akta id value return korle aii hobe
             return Ok(ApiResponse<CategoryReadDto>.SuccessResponse(categoryReadDto, 200, "Category is returned successfully"));
         }
+        // converted each value on the tolist value
+
+        // return Ok(categoryList);
+        //  value return from ApiResponse
+        // create objct for Apiresponse use new keyword
+        // ami just akta value return korci tai list return kora lagbe na, just akta id value return korle aii hobe
+        // return Ok(ApiResponse<CategoryReadDto>.SuccessResponse(categoryReadDto, 200, "Category is returned successfully"));
 
         // POST: /api/categories
         [HttpPost]
@@ -98,7 +104,7 @@ namespace Ecommerce_Web_API.Controllers
                 Description = categoryData.Description,
                 CreatedAt = DateTime.UtcNow
             };
-            categories.Add(newCategory);
+            _categoryService.AddCategory(newCategory);
 
             // newcategory theke jei value gula pabo oi gula ami categoryreaddto te rekhe dilam
             var categoryReadDto = new CategoryReadDto
@@ -108,14 +114,14 @@ namespace Ecommerce_Web_API.Controllers
                 Description = newCategory.Description,
                 CreatedAt = newCategory.CreatedAt,
             };
-            return Created($"/api/categories/{newCategory.CategoryId}", ApiResponse<CategoryReadDto>.SuccessResponse(categoryReadDto, 201, "Category Created successfully"));
+            return Created(nameof(GetCategoryById), ApiResponse<CategoryReadDto>.SuccessResponse(categoryReadDto, 201, "Category Created successfully"));
         }
 
         // DELETE: /api/categories/{categoryId}
         [HttpDelete("{categoryId:guid}")]
         public IActionResult DeleteCategories(Guid categoryId)
         {
-            var found = categories.FirstOrDefault(c => c.CategoryId == categoryId);
+            var found = _categoryService.GetCategoryById(categoryId);
             if (found == null)
                 return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category is not found with this id" }, 400, "Validation Failed"));
 

@@ -8,7 +8,7 @@ GET http://localhost:5161/api/categories
 
 ###
 
-GET http://localhost:5161/api/categories/8ec90bd0-9947-4f9c-9bfa-95888cc8b7ee
+GET http://localhost:5161/api/categories/f435d0d9-70be-463d-b88b-4c95539b6309
 
  
 ###
@@ -17,7 +17,7 @@ POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-    "name": "actttt",
+    "name": "abcd",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }

@@ -1,4 +1,5 @@
 using Ecommerce_Web_API.Controllers;
+using Ecommerce_Web_API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 //     // automatic model validation response 
 // });
 // Add services
+builder.Services.AddSingleton<CategoryServices>();
 builder.Services.AddControllers(); // important for MVC
-
 builder.Services.Configure<ApiBehaviorOptions>(option =>
 {
     option.InvalidModelStateResponseFactory = context =>
