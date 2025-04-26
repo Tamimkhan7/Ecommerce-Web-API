@@ -1,3 +1,4 @@
+using Ecommerce_Web_API.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,20 +21,18 @@ builder.Services.Configure<ApiBehaviorOptions>(option =>
     option.InvalidModelStateResponseFactory = context =>
     {
         // context ar modde request and response both are include 
-        var errors = context.ModelState.Where(e => e.Value != null && e.Value.Errors.Count > 0)
-                       .Select(e => new
-                       {
-                           Field = e.Key,
-                           Errors = e.Value.Errors != null ? e.Value.Errors.Select(x => x.ErrorMessage).ToArray() : new string[0]
-                       }).ToList();
+        // var errors = context.ModelState.Where(e => e.Value != null && e.Value.Errors.Count > 0)
+        //                .Select(e => new
+        //                {
+        //                    Field = e.Key,
+        //                    Errors = e.Value.Errors != null ? e.Value.Errors.Select(x => x.ErrorMessage).ToArray() : new string[0]
+        //                }).ToList();
         // amra jodi kokhon sob gula error message ke ak sathe string ar modde rakhte cai tahole amra ai vabe korte pari
-        var errorString = string.Join("; ", errors.Select(e => $"{e.Field} : {string.Join(", ", e.Errors)}"));
+        // var errorString = string.Join("; ", errors.Select(e => $"{e.Field} : {string.Join(", ", e.Errors)}"));
 
-        return new BadRequestObjectResult(new
-        {
-            Message = "Validation failed",
-            Errors = errorString
-        });
+        var errors = context.ModelState.Where(e => e.Value != null && e.Value.Errors.Count > 0)
+                              .SelectMany(e => e.Value?.Errors != null ? e.Value.Errors.Select(x => x.ErrorMessage) : new List<string>()).ToList();
+        return new BadRequestObjectResult(ApiResponse<object>.ErrorResponse(errors, 400, "Validation failed"));
     };
 });
 

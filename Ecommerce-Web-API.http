@@ -8,23 +8,27 @@ GET http://localhost:5161/api/categories
 
 ###
 
+GET http://localhost:5161/api/categories/8ec90bd0-9947-4f9c-9bfa-95888cc8b7ee
+
+ 
+###
 
 POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-    "name": "aaaxxxxxxaA",
+    "name": "actttt",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }
 
 ###
 
-  DELETE http://localhost:5161/api/categories/369e95f1-9e05-493a-8012-73fcb7caae41
+  DELETE http://localhost:5161/api/categories/8e24e3af-518c-4a7f-854b-b8156352d73d
 
 
 ###
-  PUT http://localhost:5161/api/categories/a7a4c619-b21d-4838-91a8-bd73c7c5fcce
+  PUT http://localhost:5161/api/categories/b2997bee-1a8a-4be8-86d6-60a2dee3abeb
   Content-Type: application/json
 
   {

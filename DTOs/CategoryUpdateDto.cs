@@ -12,7 +12,7 @@ namespace Ecommerce_Web_API.DTOs
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Category Name must be between 2 and 100 characters")]
         public string Name { get; set; } = string.Empty;
 
-        [StringLength(500, ErrorMessage = "Category Description cann't exceed 500 characters")]
+        [StringLength(500, MinimumLength = 2, ErrorMessage = "Category Description must be between 2 and 500 characters")]
         public string Description { get; set; } = string.Empty;
     }
 }
