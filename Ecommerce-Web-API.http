@@ -17,7 +17,7 @@ POST http://localhost:5161/api/categories
 Content-Type: application/json
 
 {
-    "name": "abcd",
+    "name": "xytjjaja",
   "description": "Electronices is most valueable parts for honda and cars"
 
 }
@@ -28,7 +28,7 @@ Content-Type: application/json
 
 
 ###
-  PUT http://localhost:5161/api/categories/b2997bee-1a8a-4be8-86d6-60a2dee3abeb
+  PUT http://localhost:5161/api/categories/d5b3aeb2-c04a-4dd6-9e7d-664bea540b8c
   Content-Type: application/json
 
   {
