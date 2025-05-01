@@ -24,11 +24,11 @@ Content-Type: application/json
 
 ###
 
-  DELETE http://localhost:5161/api/categories/8e24e3af-518c-4a7f-854b-b8156352d73d
+  DELETE http://localhost:5161/api/categories/742a12ea-b1f0-4d6e-85f0-126c3885dced
 
 
 ###
-  PUT http://localhost:5161/api/categories/d5b3aeb2-c04a-4dd6-9e7d-664bea540b8c
+  PUT http://localhost:5161/api/categories/742a12ea-b1f0-4d6e-85f0-126c3885dced
   Content-Type: application/json
 
   {

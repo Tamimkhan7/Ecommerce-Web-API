@@ -1,3 +1,4 @@
+using AutoMapper;
 using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
 using Ecommerce_Web_API.Models.Interfaces;
@@ -18,6 +19,8 @@ namespace Ecommerce_Web_API.Controllers
         {
             _categoryService = categoryServices;
         }
+
+     
 
         [HttpGet]
         public IActionResult GetCategories(string? searchValue)

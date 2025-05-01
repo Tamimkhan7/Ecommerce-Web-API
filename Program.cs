@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 // add services to the controller
 // builder.Services.AddControllers().ConfigureApiBehaviorOptions(option =>
