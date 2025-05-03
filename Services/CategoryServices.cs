@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using AutoMapper;
+using Ecommerce_Web_API.Data;
 using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
 using Ecommerce_Web_API.Models.Interfaces;
@@ -12,10 +13,11 @@ namespace Ecommerce_Web_API.Services
 {
     public class CategoryServices : ICategoryService
     {
-        private static readonly List<Category> _categories = new();
+        // private static readonly List<Category> _categories = new();
         // interface variable theke akta mapper niye nicci
+        private readonly AppDbContext _appDbContext;
         private readonly IMapper _mapper;
-        public CategoryServices(IMapper mapper)
+        public CategoryServices(AppDbContext appDbContext,  IMapper mapper)
         {
             _mapper = mapper;
         }
