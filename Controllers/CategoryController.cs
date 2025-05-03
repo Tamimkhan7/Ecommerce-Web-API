@@ -20,19 +20,19 @@ namespace Ecommerce_Web_API.Controllers
             _categoryService = categoryServices;
         }
 
-     
+
 
         [HttpGet]
-        public IActionResult GetCategories(string? searchValue)
+        public async Task<IActionResult> GetCategories(string? searchValue)
         {
-            var categoryList = _categoryService.GetAllCategories();
+            var categoryList = await _categoryService.GetAllCategories();
             return Ok(ApiResponse<List<CategoryReadDto>>.SuccessResponse(categoryList, 200, "Category returned successfully"));
         }
 
         [HttpGet("{categoryId:guid}")]
-        public IActionResult GetCategoryById(Guid categoryId)
+        public async Task<IActionResult> GetCategoryById(Guid categoryId)
         {
-            var foundCategory = _categoryService.GetCategoryById(categoryId);
+            var foundCategory = await _categoryService.GetCategoryById(categoryId);
 
             if (foundCategory == null)
                 return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category with this ID does not exist" }, 400, "Validation Failed"));
@@ -41,34 +41,34 @@ namespace Ecommerce_Web_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult PostCategories([FromBody] CategoryCreateDto categoryData)
+        public async Task<IActionResult> PostCategories([FromBody] CategoryCreateDto categoryData)
         {
-            var categoryReadDto = _categoryService.CreateCategory(categoryData);
+            var categoryReadDto = await _categoryService.CreateCategory(categoryData);
 
             return CreatedAtAction(nameof(GetCategoryById), new { categoryId = categoryReadDto.CategoryId },
                 ApiResponse<CategoryReadDto>.SuccessResponse(categoryReadDto, 201, "Category Created successfully"));
         }
 
         [HttpDelete("{categoryId:guid}")]
-        public IActionResult DeleteCategories(Guid categoryId)
+        public async Task<IActionResult> DeleteCategories(Guid categoryId)
         {
-            var found = _categoryService.GetCategoryById(categoryId);
+            var found = await _categoryService.GetCategoryById(categoryId);
             if (found == null)
                 return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category is not found with this id" }, 400, "Validation Failed"));
 
-            _categoryService.DeleteCategory(categoryId);
+            // _categoryService.DeleteCategory(categoryId);
 
             return Ok(ApiResponse<object>.SuccessResponse(null, 200, "Category Deleted successfully"));
         }
 
         [HttpPut("{categoryId:guid}")]
-        public IActionResult PutCategories(Guid categoryId, [FromBody] CategoryUpdateDto updated)
+        public async Task<IActionResult> PutCategories(Guid categoryId, [FromBody] CategoryUpdateDto updated)
         {
-            var found = _categoryService.GetCategoryById(categoryId);
+            var found = await _categoryService.GetCategoryById(categoryId);
             if (found == null)
                 return NotFound(ApiResponse<object>.ErrorResponse(new List<string> { "Category is not found with this id" }, 400, "Validation Failed"));
 
-            _categoryService.UpdateCategory(categoryId, updated);
+            // _categoryService.UpdateCategory(categoryId, updated);
 
             return Ok(ApiResponse<object>.SuccessResponse(null, 200, "Category Updated successfully"));
         }

@@ -10,6 +10,7 @@ namespace Ecommerce_Web_API.Models.Interfaces
     public interface ICategoryService
     {
         // asynchronous use korar jonno amader task use kora lagbe 
+        // task holo return Type
         Task<List<CategoryReadDto>> GetAllCategories();
         Task<CategoryReadDto?> GetCategoryById(Guid categoryId);
         Task<CategoryReadDto> CreateCategory(CategoryCreateDto categoryData);

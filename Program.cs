@@ -15,6 +15,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 // add services to the controller
 // builder.Services.AddControllers().ConfigureApiBehaviorOptions(option =>
 // {
@@ -23,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // });
 // Add services
 
-builder.Services.AddSingleton<ICategoryService, CategoryServices>();
+builder.Services.AddScoped<ICategoryService, CategoryServices>();
 
 builder.Services.AddControllers(); // important for MVC
 builder.Services.Configure<ApiBehaviorOptions>(option =>
