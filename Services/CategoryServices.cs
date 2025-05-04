@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using AutoMapper;
+using Ecommerce_Web_API.Controllers;
 using Ecommerce_Web_API.Data;
 using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
@@ -30,11 +31,29 @@ namespace Ecommerce_Web_API.Services
         // Model - DTO
         // DTO- MODEL 
         // Return type Task or use kora lagbe
-        public async Task<List<CategoryReadDto>> GetAllCategories()
+        public async Task<PaginationResult<CategoryReadDto>> GetAllCategories(int PageNumber, int PageSize)
         {
+            // for query access IQueryable we can used 
+            IQueryable<Category> query = _appDbContext.Categories;
+            var totalCount = await query.CountAsync();
 
-            var categories = await _appDbContext.Categories.ToListAsync();
-            return _mapper.Map<List<CategoryReadDto>>(categories);
+            // pagination, pagenumber = 3, pagesize = 5
+            // 20 categories
+            // skip((pageNumber-1)*pagesize).Take(pagesize)
+
+            var items = await query.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
+
+            // var categories = await _appDbContext.Categories.ToListAsync();
+
+            var results = _mapper.Map<List<CategoryReadDto>>(items);
+            // now result provided to the paginationResult folder a 
+            return new PaginationResult<CategoryReadDto>
+            {
+                Items = results,
+                TotalCount = totalCount,
+                PageNumber = PageNumber,
+                PageSize = PageSize
+            };
         }
 
         // access by categoryId

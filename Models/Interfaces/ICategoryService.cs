@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Ecommerce_Web_API.Controllers;
 using Ecommerce_Web_API.DTOs;
 
 namespace Ecommerce_Web_API.Models.Interfaces
@@ -11,7 +12,7 @@ namespace Ecommerce_Web_API.Models.Interfaces
     {
         // asynchronous use korar jonno amader task use kora lagbe 
         // task holo return Type
-        Task<List<CategoryReadDto>> GetAllCategories();
+        Task<PaginationResult<CategoryReadDto>> GetAllCategories(int PageNumber, int PageSize);
         Task<CategoryReadDto?> GetCategoryById(Guid categoryId);
         Task<CategoryReadDto> CreateCategory(CategoryCreateDto categoryData);
         Task DeleteCategory(Guid categoryId); // ✅ fixed
