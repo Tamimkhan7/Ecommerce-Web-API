@@ -12,7 +12,7 @@ namespace Ecommerce_Web_API.Models.Interfaces
     {
         // asynchronous use korar jonno amader task use kora lagbe 
         // task holo return Type
-        Task<PaginationResult<CategoryReadDto>> GetAllCategories(int PageNumber, int PageSize);
+        Task<PaginationResult<CategoryReadDto>> GetAllCategories(QueryParameter queryParameters);
         Task<CategoryReadDto?> GetCategoryById(Guid categoryId);
         Task<CategoryReadDto> CreateCategory(CategoryCreateDto categoryData);
         Task DeleteCategory(Guid categoryId); // ✅ fixed

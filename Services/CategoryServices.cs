@@ -9,6 +9,7 @@ using Ecommerce_Web_API.Data;
 using Ecommerce_Web_API.DTOs;
 using Ecommerce_Web_API.Models;
 using Ecommerce_Web_API.Models.Interfaces;
+using Ecommerce_Web_API.Services.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce_Web_API.Services
@@ -31,17 +32,45 @@ namespace Ecommerce_Web_API.Services
         // Model - DTO
         // DTO- MODEL 
         // Return type Task or use kora lagbe
-        public async Task<PaginationResult<CategoryReadDto>> GetAllCategories(int PageNumber, int PageSize)
+        public async Task<PaginationResult<CategoryReadDto>> GetAllCategories(QueryParameter queryParameters)
         {
             // for query access IQueryable we can used 
             IQueryable<Category> query = _appDbContext.Categories;
+            // this is not more efficiency 
+            // if (!string.IsNullOrWhiteSpace(search.ToLower()))
+            // {
+            //     query = query.Where(c => c.Name.ToLower().Contains(search) || c.Description.ToLower().Contains(search));
+            // }
+            // we can use Entity framework for efficiency 
+            if (!string.IsNullOrWhiteSpace(queryParameters.search))
+            {
+                var searchValue = $"%{queryParameters.search.Trim()}%";
+                query = query.Where(c => EF.Functions.ILike(c.Name, searchValue) || EF.Functions.ILike(c.Description, searchValue));
+            }
+
+            if ((string.IsNullOrWhiteSpace(queryParameters.sortOrder)))
+                query = query.OrderBy(c => c.Name);
+            else
+            {
+                var formattedsortOrder = queryParameters.sortOrder.Trim().ToLower();
+                if (Enum.TryParse<sortOrder>(formattedsortOrder, true, out var parserSortOrder))
+                {
+                    if (formattedsortOrder == "name_asc")
+                        query = query.OrderBy(c => c.Name);
+                    else if (formattedsortOrder == "name_desc") query = query.OrderByDescending(c => c.Name);
+                    else if (formattedsortOrder == "createdat_asc") query = query.OrderBy(c => c.CreatedAt);
+                    else if (formattedsortOrder == "createdat_desc") query = query.OrderByDescending(c => c.CreatedAt);
+                }
+            }
+
+
             var totalCount = await query.CountAsync();
 
             // pagination, pagenumber = 3, pagesize = 5
             // 20 categories
             // skip((pageNumber-1)*pagesize).Take(pagesize)
 
-            var items = await query.Skip((PageNumber - 1) * PageSize).Take(PageSize).ToListAsync();
+            var items = await query.Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize).Take(queryParameters.PageSize).ToListAsync();
 
             // var categories = await _appDbContext.Categories.ToListAsync();
 
@@ -51,8 +80,8 @@ namespace Ecommerce_Web_API.Services
             {
                 Items = results,
                 TotalCount = totalCount,
-                PageNumber = PageNumber,
-                PageSize = PageSize
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
             };
         }
 

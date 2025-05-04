@@ -23,15 +23,18 @@ namespace Ecommerce_Web_API.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetCategories([FromQuery] int PageNumber = 1, [FromQuery] int PageSize = 6)
+        public async Task<IActionResult> GetCategories([FromQuery] QueryParameter queryParameters)
         {
+
+            queryParameters.Validate();
+
             //   Console.WriteLine($"PageNumber {PageNumber}, PageSize {PageSize}");
-            var categoryList = await _categoryService.GetAllCategories(PageNumber, PageSize);
+            var categoryList = await _categoryService.GetAllCategories(queryParameters.PageNumber, queryParameters.PageSize, queryParameters.search, queryParameters.sortOrder);
             return Ok(ApiResponse<PaginationResult<CategoryReadDto>>.SuccessResponse(categoryList, 200, "Category returned successfully"));
         }
 
         [HttpGet("{categoryId:guid}")]
-        public async Task<IActionResult> GetCategoryById(Guid categoryId) 
+        public async Task<IActionResult> GetCategoryById(Guid categoryId)
         {
             var foundCategory = await _categoryService.GetCategoryById(categoryId);
 
